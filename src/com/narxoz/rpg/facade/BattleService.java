@@ -15,23 +15,37 @@ public class BattleService {
     }
 
     public AdventureResult battle(HeroProfile hero, BossEnemy boss, AttackAction action) {
-        // TODO: Implement the battle flow.
-        // Questions to answer:
-        // - Who attacks first?
-        // - How many rounds are allowed?
-        // - How is damage resolved?
-        // - How will randomness affect the result, if at all?
         AdventureResult result = new AdventureResult();
-        result.setWinner("TODO");
-        result.setRounds(0);
-        result.setReward("TODO");
-        result.addLine("TODO: implement battle logic");
+        int rounds = 0;
+        StringBuilder log = new StringBuilder();
 
-        // Keep the field in use so students can decide whether to rely on it.
-        if (random.nextInt(1) == 0) {
-            // TODO: Replace placeholder branch with real deterministic or random logic.
+        log.append(hero.getName()).append(" (HP: ").append(hero.getHealth())
+                .append(") vs ").append(boss.getName()).append(" (HP: ").append(boss.getHealth()).append(")\n");
+
+        while (hero.isAlive() && boss.isAlive() && rounds < 20) {
+            rounds++;
+
+            int dmg = action.getDamage();
+            boss.takeDamage(dmg);
+            log.append(String.format("Round %d: %s attacks for %d damage. Boss HP → %d\n",
+                    rounds, action.getActionName(), dmg, boss.getHealth()));
+
+            if (!boss.isAlive()) break;
+
+            int bossDmg = boss.getAttackPower();
+            hero.takeDamage(bossDmg);
+            log.append(String.format("Boss counters for %d damage. Hero HP → %d\n",
+                    bossDmg, hero.getHealth()));
         }
 
+        if (hero.isAlive()) {
+            result.setWinner(hero.getName());
+        } else {
+            result.setWinner(boss.getName());
+        }
+
+        result.setRounds(rounds);
+        result.addLine(log.toString().trim());
         return result;
     }
 }
