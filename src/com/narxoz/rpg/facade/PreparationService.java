@@ -5,12 +5,12 @@ import com.narxoz.rpg.enemy.BossEnemy;
 import com.narxoz.rpg.hero.HeroProfile;
 
 public class PreparationService {
-    public String prepare(HeroProfile hero, BossEnemy boss, AttackAction action) {
-        // TODO: Validate inputs and return a useful preparation summary.
-        // You may also decide to initialize temporary state here.
+    public String prepare (HeroProfile hero, BossEnemy boss, AttackAction action){
         if (hero == null || boss == null || action == null) {
-            return "TODO: invalid preparation state";
+            return "Invalid adventure parameters";
         }
-        return "TODO: preparation complete";
+        return hero.getName() + " prepares " + action.getActionName() +
+                " (" + action.getEffectSummary() + ") against " + boss.getName();
     }
 }
+
